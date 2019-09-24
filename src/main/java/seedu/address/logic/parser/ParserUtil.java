@@ -96,6 +96,13 @@ public class ParserUtil {
         return new Email(trimmedEmail);
     }
 
+    /**
+     * Parses the given Remark string, returning a Remark object.
+     *
+     * @param remark The remark to be passed.
+     * @return The parsed Remark.
+     * @throws ParseException If the argument string is of an invalid form.
+     */
     public static Remark parseRemark(String remark) throws ParseException {
         requireNonNull(remark);
         String trimmedRemark = remark.trim();
