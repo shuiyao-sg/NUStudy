@@ -1,4 +1,4 @@
-= NUStudy developer guide
+= NUStudy Developer Guide
 :site-section: DeveloperGuide
 :toc:
 :toc-title:
@@ -13,6 +13,20 @@ ifdef::env-github[]
 :warning-caption: :warning:
 endif::[]
 :repoURL: https://github.com/AY1920S1-CS2103T-F11-4/main/tree/master
+
+By: `AY1920S1-CS2103T-F11-4`      Since: `September 2019`      Licence: `MIT`
+
+NUStudy is an application for managing three kinds of informational material: lecture notes, quizzes and revision tasks.
+It helps users to prepare for exams and tests in university by facilitating their learning.
+
+As a developer of NUStudy, this guide can help you understand the basic software architecture and design considerations
+for its implementation so that you can start contributing in no time.
+
+For any queries, simply <<ContactUs#, contact us>>.
+
+NOTE: In this document, `monospaced` texts may have different meanings. If the text is in *PascalCase* i.e. first letter
+of each word is capitalised, such as `Logic`, then the text is a class or interface name. If the text has a bracket such as `execute("delete 1")`.
+Otherwise, the `monospaced` texts are meant for highlighting or user commands depending on the context.
 
 == Setting up
 
@@ -60,11 +74,13 @@ image::ArchitectureSequenceDiagram.png[]
 [[Design-Ui]]
 === `UI`
 
+// tag::UIClassDiagram[]
 .Class diagram of the `UI` component
 image::UiClassDiagram.png[]
 
 .Detailed class diagram for `Panels` package
 image::PanelPackageClassDiagram.png[]
+// end::UIClassDiagram[]
 
 _API:_ link:{repoURL}/src/main/java/seedu/address/ui/Ui.java[`Ui.java`]
 
@@ -97,14 +113,16 @@ _API:_ link:{repoURL}/src/main/java/seedu/address/logic/Logic.java[`Logic.java`]
 Given below is the sequence diagram for interactions within the `Logic` component for the `execute("delete 1")` API call.
 The lifeline for `DeleteCommandParser` should end at the destroy marker × but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 
+[[DeleteSequenceDiagram]]
 .Interactions inside the `Logic` component for the `deletenote 1` command
 image::DeleteSequenceDiagram.png[]
 
 [[Design-Model]]
 === `Model`
-
+// tag::ModelClassDiagram[]
 .Class diagram of the `Model` component
 image::ModelClassDiagram.png[]
+// end::ModelClassDiagram[]
 
 _API:_ link:{repoURL}/src/main/java/seedu/address/model/Model.java[`Model.java`]
 
@@ -131,10 +149,12 @@ This section describes some finer details on how certain features are implemente
 === Image support for lecture notes
 
 Usually, we do not learn best from just text; we rely on images that our minds can process more easily.
-As such, implementing images in lecture notes was considered very important. Although some lecture notes
-have multiple images, it is always possible to combine them using basic image editing software like the
-GNU Image Manipulation Program (GIMP) and Paint, so the implementation was limited to at most one
-image per note.
+As such, implementing images in lecture notes is a very important feature for NUStudy.
+
+Although some lecture notes have multiple images, it is always possible to combine them using
+basic image editing software like the GNU Image Manipulation Program (GIMP) and Paint, so the implementation is
+limited to at most one image per note. Having a common format for notes facilitates their retrieval through
+the `findnote` command and aids a human user in remembering what the notes say.
 
 ==== Implementation
 
@@ -157,7 +177,7 @@ has the field `isImageRemoved` to track this.
 
 We also defer image selection until after the title has been checked against existing lecture notes,
 which saves time that would otherwise be wasted in navigating to the desired image.
-This is accomplished using
+This is accomplished using three things:
 
 * the `finalizeImage()` method of the `Note` class, calling `selectImage()`
 * the `needsImage` field of `Note`, which allows a one-time execution of `finalizeImage()`
@@ -178,31 +198,39 @@ we cannot use absolute paths, since they would break when the images are moved o
 into application data using `finalizeImage()`, which points references to these local copies.
 // end::lecimage[]
 
-// tag::lecimagedesignconsiderations[]
+// tag::lecimagedc[]
 ==== Design considerations: where to place the image?
 
-* _Alternative 1 (current choice):_ Images are shown within each lecture note in the first column, and each lecture note
-shows all of its title, content and image
-** Pros: Easier to implement (FXML does not have to reach into other places)
+* _Alternative 1 (current choice):_ We show the images associated to each and every lecture note
+in the first column, together with the title and content.
+** Pros: This is easier to implement, for the code interfacing with FXML does not have to be written in places other
+than those directly pertaining to notes. It also makes the note "card" (object representing the note)
+self-contained.
 ** Cons: Scrolling through lecture notes, all with images, takes time, but this downside is alleviated
-by the `findnote` command
-* _Alternative 2:_ Place the images in the second column, below their corresponding title and content
-** Pros: More visually appealing, since by keeping just one note in the second column it becomes a kind of flash card
-** Cons: Harder to implement (FXML must reach into the object representing the second column),
-need to have a separate `NotePreview` JavaFX object since images are only going to be displayed
-in the second column
+by the `findnote` command.
+* _Alternative 2:_ We place *one* full note in the second column and only show a preview (the title and first words
+of the content) in the first column.
+** Pros: This behaviour is closer to notepad applications on mobile devices which show a list of notes.
+It saves space in the list and gives more prominence to a selected note, turning it into a flash card.
+** Cons: The second column, normally housing revision tasks, requires extra code to handle the display
+of full notes. This may include a separate `NotePreview` class, or `Note` may have a variable toggling
+between preview and full modes.
 
 ==== Design considerations: when to copy images into the local folder
-* _Alternative 1 (current choice):_ Images are copied when the command is executed, i.e. `Command#execute()`
-** Pros: Effects a better separation of concerns (image selection is not execution of the command, image
-copying may be thought of as a side effect of command execution)
-** Cons: Need to adapt the file copying code to each command
-* _Alternative 2:_ Images are copied when the image is selected, i.e. `AppUtil#selectImage()`
-** Pros: Compared to alternative 1, has less time between initial image selection and the copy into
-application data. There is a potential application risk if
-** Cons: `selectImage()` has two only loosely related responsibilities (worse separation of concerns),
-impossible to take into account user preferences for where the application data is stored
-// end::lecimagedesignconsiderations[]
+* _Alternative 1 (current choice):_ We copy images when the command is executed, i.e. in `Command#execute()`.
+** Pros: This effects a better separation of concerns – image selection is not execution of the command, while
+copying can be a side effect of command execution. Individual command effects can be fine-tuned.
+** Cons: Each command that copies images needs to have its own code implementing the copy. To reduce code
+duplication, that common code can be written as a method of the `Note` class requiring a `Path` object representing
+the destination folder for the copy.
+* _Alternative 2:_ We copy images when the image is selected, i.e. in `AppUtil#selectImage()`.
+** Pros: Compared to alternative 1, this takes less time between image selection and writing into
+application data, minimising the chance of exceptions due to changes in the file system (permissions,
+existence of the file at the specified path, etc.) being raised.
+** Cons: `selectImage()` has two only loosely related responsibilities in this alternative, which is
+a worse separation of concerns. It is impossible to take into account user preferences at the point of image
+selection, since it requires a `Model` object which is not available to `AppUtil#selectImage()`.
+// end::lecimagedc[]
 
 // tag::questiond[]
 === Question management feature
@@ -241,13 +269,23 @@ The `editq` command calls `Model#setQuestion(Question target, Question editedQue
 `Model#updateFilteredQuestionList(Predicate<Question> predicate)`, causing the `AppData` to be updated with the original
 question being replaced by the edited question.
 
-The following sequence diagram shows how the `addq` operation works:
+The following sequence diagram shows the interaction between classes when `EditQuestionCommand#execute(model)` is called:
 
-image::AddQuestionSequenceDiagram.png[]
+.Sequence diagram for `execute(Model)` of `EditQuestionCommand`
+image::EditQuestionCommandExecuteSequenceDiagram.png[width = "600"]
 
-The following activity diagram summarizes what happens when a user executes a new command:
+The following activity diagram summarizes what happens when a user executes a new `addq` command:
 
-image::AddQuestionActivityDiagram.png[]
+.Activity diagram for `addq` command
+image::AddQuestionActivityDiagram.png[width = "300"]
+
+Question is implemented as a concrete class with its relevant fields consist of `QuestionBody`, `Answer`,
+`Subject`, and `Difficulty`.
+
+The following class diagram illustrates how `Question` class is designed:
+
+.Class diagram for `Question`
+image::QuestionClassDiagram.png[width = "500"]
 
 ===== Design considerations: How `addq`/`deleteq`/`editq` commands execute
 * _Alternative 1 (current choice):_ Update the internal storage `UniqueQuestionList` in `AppData` first, then save the updated appData
@@ -282,12 +320,13 @@ The commands include:
 * `QuizModeCommand` -- Enters the quiz mode with questions selected by user.
 * `QuizCheckAnswer` -- Checks the correctness of answer entered by user.
 * `QuizShowAnswerCommand` -- Shows the answer for current question.
+* `QuizSkipQuestion` -- Skips the current question.
 * `QuitQuizModeCommand` -- Quits the quiz mode.
 
 These operations are exposed in the `Model` interface as `Model#getQuizQuestions(int numOfQuestions, Subject subject
 Difficulty difficulty)`, `Model#setQuizQuestionList(ObservableList<Question> quizQuestionList)`,
-`Model#showQuizAnswer()`, `Model#getFilteredQuizQuestionList()`, `Model#checkQuizAnswer(Answer answer)`
-and `Model#clearQuizQuestionList()` respectively.
+`Model#showQuizAnswer()`, `Model#getFilteredQuizQuestionList()`, `Model#checkQuizAnswer(Answer answer)`,
+`Model#removeOneQuizQuestion()` and `Model#clearQuizQuestionList()` respectively.
 
 Given below is an example usage scenario and how the question mechanism behaves at each step.
 
@@ -301,10 +340,18 @@ a list of specific question selected by user for quiz.
 Step 3. The user types answer to answer the question. It calls `Model#checkQuizAnswer(Answer answer)` and
 `Model#addQuizResult(QuizResult quizResult)`, causing the `AppData` to be updated with the result of the answer.
 
+The following graph explains how `QuizResult` class is designed:
+
+.QuizResultClassDiagram
+image::QuizResultClassDiagram.png[]
+
 Step 4. The user executes `show` command to show the answer of current quiz question in the app. The `show` command calls
 `Model#showQuizAnswer()`, causing the `AppData` to display the answer on the Ui.
 
-Step 5. The user executes `quit` command to exit from the quiz mode. The `quit` command calls
+Step 5. The user executes `skip` command to skip the current quiz question in the app. The `skip` command calls
+`Model#removeOneQuizQuestion()`, causing the `AppData` to display the next quiz question on the Ui.
+
+Step 6. The user executes `quit` command to exit from the quiz mode. The `quit` command calls
 `Model#clearQuizQuestionList()`, causing the `AppData` to clear all quiz question list and return to normal mode.
 
 The following sequence diagram shows how the `quiz` operation works:
@@ -315,26 +362,26 @@ image::QuizModeSequenceDiagram.png[]
 The following activity diagram summarizes what happens when a user executes a new command for quiz:
 
 .QuizModeActivityDiagram
-image::QuizModeActivityDiagram.png[width=400]
+image::QuizModeActivityDiagram.png[400, 400]
 
 ==== Design Considerations
 
 ===== Aspect: How to store the quiz results
 * **Alternative 1 (current choice):** Update the internal storage `QuizResultList` in `AppData` first, then save the
 updated appData in local storage when the command finishes executing.
-** Pros: Easy to implement.
-** Cons: Need the extra step to ensure that the internal list is correctly maintained.
+** Pros: It is easier to implement.
+** Cons: It needs the extra step to ensure that the internal list is correctly maintained.
 * **Alternative 2:** Update the local storage directly when the command is executing.
-** Pros: No need to implement the internal list.
-** Cons: Will access local memory more frequently. May have performance issues in terms of memory usage.
+** Pros: There is no need to implement the internal list.
+** Cons: The access to local memory is more frequent and it may have performance issues in terms of memory usage.
 
-===== Aspect: Data structure to support the quiz commands
+===== Aspect: What data structure is used to support the quiz commands
 * **Alternative 1 (current choice):** Use `QuizQuestionList` and `QuizResultList` to store data in `AppData`.
-** Pros: Cater to the quiz model specifically. Quiz question and result list operations are encapsulated in one class.
+** Pros: It is targeted to the quiz model specifically. Quiz question and result list operations are encapsulated in one class.
 ** Cons: Logic is duplicated as other models also implement similar list structure.
 * **Alternative 2:** Use Java list to store the quiz questions and results.
-** Pros: Do not need to maintain a separate list class.
-** Cons: Violates Single Responsibility Principle and Separation of Concerns as the model needs to maintain various
+** Pros: There is no need to maintain a separate list class.
+** Cons: It violates Single Responsibility Principle and Separation of Concerns as the model needs to maintain various
 list operations.
 // end::quiz[]
 
@@ -348,64 +395,142 @@ These commands include:
 
 * `GetQnsCommand` -- Gets all questions answered correctly/incorrectly.
 * `GetReportCommand` -- Returns a report of the specified question.
-* `GetStatisticsCommand` -- Returns a general overview of how well the user has answered quiz questions.
+* `GetStatisticsCommand` -- Returns a pie chart containing a break down of the questions by its results.
+* `GetOverviewCommand` -- Gets an overview of the types of questions that have been attempted overall.
 
 Given below is an example usage scenario and how the statistics mechanism behaves at each step.
 
 Step 1. The user launches the application.
 The app will attempt to read past data from any quizzes done and store it internally to a `quizResults` list.
 
-Step 2. The user executes `stats s/CS2103T` command to get the statistics of all quiz questions done for CS2103T.
-The `stats` command creates a new `commandResult` setting the type of command to `CHART`.
+Step 2. The user enters `stats s/CS2103T` to get the statistics of all quiz questions done for CS2103T.
+A `GetStatisticsCommand` will be created. When it is executed from the `MainWindow`,
+it returns a new `CommandResult` with command type: `STATS`.
 
-The following class diagram shows how the `GetStatisticsCommand` and `CommandResult` class are related.
+The following class diagram shows how the `GetStatisticsCommand` and `CommandResult` classes are related.
 
-image::StatisticsClassDiagram.png[]
+.Class diagram for `GetStatisticsCommand`
+image::statistics/StatisticsClassDiagram.png[]
 
-Step 3. The `commandResult` will call the relevant methods to filter the `quizResults` list and create the relevant outputs.
-It will then show a statistics panel, hiding all notes and tasks.
+Step 3. After `CommandResult` is returned to `MainWindow`, it will call a `showStats` method to
+create a pie chart. It will then show a statistics panel, hiding all notes, tasks and questions.
 
-The following sequence diagram shows how the statistics operation works:
+The following sequence diagram shows how the UI handles the `GetStatisticsCommand`:
 
-image::StatisticsSequenceDiagram.png[]
+.UI sequence diagram for `GetStatisticsCommand`
+image::statistics/StatisticsSequenceDiagram.png[height = "250"]
 
-Step 4. The user now decides to stop viewing statistics and decides to view all notes and tasks again using the `listnote` command.
-The statistics panel will now be hidden.
+Step 4. The user now wants to stop viewing statistics and decides to view all notes, tasks and questions
+again using the `listnote` command. The statistics panel will now be hidden.
 
 The following activity diagram summarizes what happens when a user executes the statistics command:
 
-image::StatisticsActivityDiagram.png[]
+.Statistics activity diagram
+image::statistics/StatisticsActivityDiagram.png[]
 
 ==== Design Considerations
 
-===== Aspect: How statistics are shown
+===== Aspect: Where statistics are shown
 * **Alternative 1 (current choice):** Hide all other panels and only show statistics.
-** Pros: Less scrolling needed, more information can be shown in one panel.
+** Pros: Less scrolling will be needed and more information can be shown in one panel.
 ** Cons: More methods are needed to deal with hiding and showing the different panels leading to more room for errors.
-* **Alternative 2:** Place statistics in the main window with notes and tasks.
-** Pros: Easy to implement.
-** Cons: The number of notes and tasks that can be seen without scrolling will be decreased.
+* **Alternative 2:** Allocate a spot in the main window with the notes, tasks and questions for statistics to be displayed.
+** Pros: It is easy to implement.
+** Cons: The number of notes, tasks and questions that can be seen without scrolling will be decreased.
 The charts will be small and condensed making it difficult to see the data at first glance.
+
+===== Aspect: How statistics are represented
+* **Alternative 1 (current choice):** Use a pie chart.
+** Pros: It is easy to read at a glance.
+** Cons: Pie chart slices may get too small to see if there are too little correct/incorrect questions done.
+* **Alternative 2:** Use a grouped bar chart.
+** Pros: The questions done are sorted by subjects, thus it is more informative.
+** Cons: As the number of subjects increases, the bars get thinner making it more difficult to see the data.
+This is also more difficult to implement.
 // end::stats[]
 
-=== Add revision task
+// tag::task_1[]
+=== Revision task management
+Revision task management involves addition, deletion, editing, searching and many other operations on tasks. This section
+explains how task management features are implemented.
+
 ==== Implementation
-`AddTaskForNoteCommand` is implemented to add a task for lecture notes revision with the command `rn`. It extends `Command` class and adds a
-`Task` for lecture notes revision to the `TaskList` kept in `AppData` model, which wraps all application data. Similarly,
-`AddTaskForQuestionCommand` is implemented to add a task for question notes.
 
-The `TaskList` is essentially a list of `Task`. `TaskList` supports the `add(Task)` operation and this operation is
-exposed to `AppData#addTask(Task)`.
+Revision task management is facilitated by `Model`.
+Commands related to task manipulation extend `Command` class.
+The commands update the `Model` interface which is implemented by `ModelManager` class.
+The `ModelManager` then updates `AppData` which stores all the revision tasks in an internal data structure `TaskList`.
+`TaskList` is essentially an `ObservableList` of `Task`.
+Local data will be updated in the end by `LogicManager`.
 
-The following sequence diagram illustrates how `rn` command is executed (adding a task for question is similar, but with different user command):
+//end::task_1[]
 
-.Sequence diagram for adding a task for note
-image::task/AddTaskForNoteSequenceDiagram.png[]
+The revision task management commands include:
 
+* `AddTaskForNoteCommand` -- Adds a new task for revising note to the app.
+* `AddTaskForQuestionCommand` -- Adds a new task for revising question to the app.
+* `ClearTaskCommand` -- Clears all tasks in the app.
+* `DeleteTaskCommand` -- Deletes a task from the app.
+* `DoneTaskCommand` -- Marks a task as done.
+* `EditTaskCommand` -- Edits fields of a task.
+* `FindTaskCommand` -- Searches for a task with given information.
+* `ListAllTaskCommand` -- Displays all tasks to the user.
+* `ListDoneTaskTaskCommand` -- Displays tasks that have been done to the user.
+* `ListNotDoneTaskCommand` -- Displays tasks that have not been done to the user.
+* `ListOverdueTaskCommand` -- Displays tasks that have passed the scheduled time to the user.
+
+These operations are exposed in the `Model` interface as `Model#addTask(Task task)`, `Model#hasTask(Task task)`, `Model#clearTaskList()`,
+`Model#deleteTask(Task target)`, `Model#markTaskAsDone(Task taskDone)`, `Model#setTask(Task target, Task editedTask)`,
+`Model#updateFilteredTaskList(Predicate<Task> predicate)` and `Model#getFilteredTaskList()` respectively.
+
+// tag::task_2[]
+
+Taking `AddTaskForNoteCommand` as an example, the following process illustrates the mechanism of adding a revision task for note to the task list (adding a revision task
+for question has a similar command but different parameters).
+
+Step 1. The user enters command `rn t/UML diagram dt/01/01/2019 tm/1200` for adding a task for note. The command is parsed by `AddTaskForNoteCommandParser`.
+`AddTaskForNoteParser` then creates an `AddTaskForNoteCommand`. The high-level logic of *parsing* and *creating the command*
+is similar to the process of deleting a note from the note list as illustrated by the <<DeleteSequenceDiagram, *sequence diagram for deleting a note*>>.
+However, the execution stage of `AddTaskForNoteCommand` differs from that of deleting a note.
+
+Step 2. The `Logic Manager` calls `Command#execute(Model)` which essentially calls `AddTaskForNoteCommand#execute(Model)`
+because of polymorphism.
+
+Step 3. `AddTaskForNoteCommand` calls its own private method `hasValidNote(Model)` which checks if
+the `Note` with `Title` "UML diagram" exists in `Model`. If not, a `CommandException` will be thrown and `execute(Model)` stops because non-existing note
+title is not allowed to be the heading of any tasks.
+
+Step 4. `AddTaskForNoteCommand` calls `Model#hasTask(Task)` to check whether the `Model` has a task identical to the one
+the user is adding. If there is an existing identical task, a `CommandException` will be thrown and `execute(Model)` stops to avoid duplicate tasks.
+
+Step 5. `AddTaskForNoteCommand` calls `Model#addTask(Task)` to add the new task to the `Model`. `Model` calls
+`AppData#addTask(Task)` to add the task to `AppData` which keeps track of all data of the app. `AppData` then calls `TaskList#add(Task)`
+to add the task to `TaskList`, which is the underlying data structure storing tasks.
+
+Step 6. A `CommandResult` is created and returned to the `LogicManager` to inform the user of successful addition of a new
+task to the revision plan.
+
+The following sequence diagram illustrates the interaction between classes when calling `AddTaskForNoteCommand#execute(Model)`.
+
+.Sequence diagram for `execute(Model)` of `AddTaskForNoteCommand`
+image::task/AddTaskForNoteCommandExecuteSequenceDiagram.png[]
+
+Zooming in to *Step 3*, when calling `hasValidNoteForTask(Model)`, `AddTaskForNoteCommand` creates a new `Note` with a `Title` "UML diagram" and a `Content` "dummy entry".
+The entry of `Content` is not important because `AddTaskForNoteCommand` only records the `Title` of a `Note` and the existence
+of a `Note` is checked against its `Title` only (if the title is in the note list, then the note exists in the list).
+The detailed process is illustrated by the sequence diagram below.
+
+.Sequence diagram for checking existence of a `Note` in the model when `AddTaskForNoteCommand` calls its own `hasValidNoteForTask(Model)`
+image::task/HasValidNoteSequenceDiagram.png[]
+
+The following activity diagram summarizes the whole process of adding a task for note.
+
+.Activity diagram for adding a task for note
+image::task/AddTaskForNoteActivityDiagram.png[]
 
 ==== Design considerations
 ===== Aspect: Design of `Task`
-* **Alternative 1 (current implementation):** implement `Task` as a concrete class with two subclasses to support task for
+* **Alternative 1 (current implementation):** We implement `Task` as a concrete class with two subclasses to support task for
 notes and questions respectively.
 ** Pros: It supports different behaviours of task for `Note` and task for `Question` by polymorphism. The concrete `Task`
 class will also allow adding of general tasks in *v2.0*.
@@ -414,18 +539,36 @@ Hence we need to write more pieces of code.
 
 The class diagram below illustrates how `Task` class is designed:
 
-.Design for `Task` class
+.Design of `Task` class
 image::task/TaskClassDiagram.png[]
 
-* **Alternative 2:** design `Task` as an interface to be implemented by two different classes.
-** Pros: More flexible design. Less exposure of internal properties of Task to client.
+* **Alternative 2:** We design `Task` as an interface to be implemented by two different classes.
+** Pros: This approach is better in data hiding. The client classes know less information about internal properties of `Task`.
 ** Cons: We need to implement all methods in the interface and hence more code snippets are needed. Both implementing
 classes have to include the field in common such as `isDone`, which results in duplicate code snippets.
 
-* **Alternative 3:** wrap everything in one concrete `Task` class to support both lecture notes and questions.
-** Pros: Less code to write.
-** Cons: It violates the principle of Separation of Concern. Hard to maintain or extend in the future if more types of
+* **Alternative 3:** We wrap everything in one concrete `Task` class to support both lecture notes and questions.
+** Pros: We need to write less code.
+** Cons: It violates the principle of Separation of Concern, making it hard to maintain or extend in the future if more types of
 tasks are needed.
+
+===== Aspect: Design of command for adding a task
+* **Alternative 1 (current implementation):** We implement the command as two independent classes, namely `AddTaskForNoteCommand` and
+`AddTaskForQuestionCommand` to support adding `TaskForNote` and `TaskForQuestion` respectively.
+** Pros: The two types of commands, although similar in logic, receive different parameters and interact with different
+classes (one interacting with `TaskForNote` while another one interacting with `TaskForQuestion`). Therefore, it is better to separate the
+concerns by implementing the commands as two separate classes. If `TaskForNote` and `TaskForQuestion` classes deviate more
+significantly in the future in terms of their behaviour, this approach makes it easier to maintain the adding commands.
+** Cons: We need to write more code. There might be some duplicate code snippets involving the logic shared by both commands.
+We also need to implement different parsers for the two commands, which involes some extra work.
+
+* **Alternative 2:** We implement only one class of adding command to support both `TaskForNote` and `TaskForQuestion`.
+** Pros: We can write less code as there would be fewer duplicate code snippets and we do not need to implement separate
+command parsers.
+** Cons: This approach leads to lower level of abstraction as all concerns of `Task`, regardless of `TaskForNote` or `TaskForQuestion`,
+are wrapped into the same class. It could be difficult to maintain if the behaviors of `TaskForNote` and `TaskForQuestion`
+get more complex and diverse.
+// end::task_2[]
 
 === Logging
 
@@ -489,15 +632,15 @@ Priorities:
 |=======================================================================
 |Priority|As a/an...|I want to...|So that I can...|Author
 
-|`* *`|student|share and receive lecture content from others|my friends can share in the common knowledge, and my family can understand what I am studying|Jeremy
+|`* * *`|student|share and receive lecture content from others|my friends can share in the common knowledge, and my family can understand what I am studying|Jeremy
 
-|`*`|student|annotate my lecture notes|I can go beyond the curriculum|Jeremy
+|`* * *`|student|annotate my lecture notes|I can go beyond the curriculum|Jeremy
 
-|`* *`|module coordinator|brief my subordinates about study materials|the tutors/lecturers under my charge are teaching what they are supposed to teach|Jeremy
+|`*`|module coordinator|brief my subordinates about study materials|the tutors/lecturers under my charge are teaching what they are supposed to teach|Jeremy
 
-|`* *`|tutor|discuss the key points to remember from a tutorial|my students get as much out of their tutorials as possible|Jeremy
+|`*`|tutor|discuss the key points to remember from a tutorial|my students get as much out of their tutorials as possible|Jeremy
 
-|`*`|quizmaster|quiz contestants about their knowledge using the app|the contestants can have as much fun as possible|Jeremy
+|`* *`|quizmaster|quiz contestants about their knowledge using the app|the contestants can have as much fun as possible|Jeremy
 
 |`* * *`|student|set a revision plan and add tasks to my plan|I can be more organised in my revision and will not lose my focus|Shui Yao
 
@@ -521,7 +664,7 @@ Priorities:
 
 |`* * *`|student|find all the questions at a particular difficulty level|I can see how well I understand the subject content|Xueting
 
-|`* *`|student|set a mix of different difficulty levels at exam mode|I can better simulate the real-time exams conditions|Xueting
+|`*`|student|set a mix of different difficulty levels at exam mode|I can better simulate the real-time exams conditions|Xueting
 
 |`* *`|student|get a statistics of the number of questions I have attempted at a difficulty level|I can see how often I have practiced for this subject|Xueting
 
@@ -529,25 +672,25 @@ Priorities:
 
 |`*`|student|get statistics of the change of difficulty levels I have made to a question|I can understand my improvement in understanding the content|Xueting
 
-|`* * *`|student|see how well I am able to answer questions for different topics/subjects|focus more on topics/subjects that I need to improve on|Irene
+|`* * *`|student|see how well I am able to answer questions for different subjects|focus more on subjects that I need to improve on|Irene
 
 |`* * *`|student|check my past responses to different questions|compare with my current response and improve on it if necessary/check if I am making the same mistakes twice|Irene
 
 |`* *`|student|have a graphical report of my progress|get an overview of my progress with a glimpse|Irene
 
-|`* *`|student|check the questions that I have attempted for a specific time period|I can skip questions that I have already done during that time period|Irene
+|`* *`|student|get an overview to see the number of questions I have done for the different subjects/difficulties|I can see which subjects/difficulties I need to attempt more questions of|Irene
 
-|`*`|student|get an overview to see the number of notes added for each topic/subject|I can see which topic/subject I need to make more notes on|Irene
+|`*`|student|check the questions that I have attempted for a specific time period|I can skip questions that I have already done during that time period|Irene
 
-|`* * *`|student|mark and store the questions I have made mistakes on|I can get a better understanding of which part I need to put more time to study|Dongjun
+|`*`|student|mark and store the questions I have made mistakes on|I can get a better understanding of which part I need to put more time to study|Dongjun
 
 |`* * *`|student|take a series questions as a mock test before exam|I can refresh my memory on different modules before exam|Dongjun
 
 |`* *`|student|find specific questions according to the keywords|I can filter the questions I want for different purposes|Dongjun
 
-|`* *`|student|change the difficulty of my test|I can be better prepared for actual exam|Dongjun
+|`* * *`|student|change the difficulty of my test|I can be better prepared for actual exam|Dongjun
 
-|`*`|student|view all questions and answers stored|I can refer them as revision guide according to different subjects|Dongjun
+|`* *`|student|view all questions and answers stored|I can refer them as revision guide according to different subjects|Dongjun
 
 |=======================================================================
 
@@ -606,14 +749,16 @@ Use case ends
 * Use case resumes from step 2
 // end::usecase[]
 
-[discrete]
-=== Use case: Add a revision task to revision plan (Shui Yao)
+// tag::task_usecase[]
 
-*Preconditions:* notes collections and question collections are not both empty
+[discrete]
+=== Use case: Add a revision task for note to revision plan (Shui Yao)
+
+*Preconditions:* lecture note list is not empty
 
 *MSS*
 
-1. Student keys in revision task command and specifies the note set name or question set name he/she wants to add to revision plan, with starting date and starting time
+1. Student keys in revision task command and specifies the title of the note he/she wants to add to revision plan, with starting date and starting time
 2. NUStudy adds the task to revision plan
 3. NUStudy informs the Student about successful addition of the task
 
@@ -622,28 +767,38 @@ Use case ends
 *Extensions*
 
 [none]
-* 1a. NUStudy detects that neither a note set or a question set is entered by Student
+* 1a. NUStudy detects missing entry for note title
 [none]
-** 1a1. NUStudy requests for the correct input with a note set name or a question set name
+** 1a1. NUStudy requests for input of note title
 ** 1a2. Student enters correct input
-** Steps 1a1 - 1a2 are repeated until the input is correct
+** Steps 1a1 - 1a2 are repeated until the input is valid
 * Use case resumes from Step 2
 
 [none]
-* 1b. NUStudy detects missing starting date or time
+* 1b. NUStudy detects a note title entry that is non-existent in the note list
 [none]
-** 1b1. NUStudy requests for correct input with starting date and time
-** 1b2. Student enters correct input following the format
-** Steps 1b1 - 1b2 are repeated until getting a correct input with valid starting date and time
+** 1b1. NUStudy requests for a valid input of note title (a note that exists in the note list)
+** 1b2. Student enters valid note title
+** Steps 1b1 - 1b2 are repeated until the input is valid
 * Use case resumes from Step 2
 
 [none]
-* 1c. NUStudy detects invalid date or time
+* 1c. NUStudy detects missing starting date or time
 [none]
-** 1c1. NUStudy requests for valid date and time
-** 1c2. Student enters correct input with valid date and time
-** Steps 1c1 - 1c2 are repeated until getting a correct input with valid date and time
+** 1c1. NUStudy requests for correct input with starting date and time
+** 1c2. Student enters correct input following the format
+** Steps 1c1 - 1c2 are repeated until getting a correct input with valid starting date and time
 * Use case resumes from Step 2
+
+[none]
+* 1d. NUStudy detects invalid date or time
+[none]
+** 1d1. NUStudy requests for valid date and time
+** 1d2. Student enters correct input with valid date and time
+** Steps 1d1 - 1d2 are repeated until getting a correct input with valid date and time
+* Use case resumes from Step 2
+
+//end::task_usecase[]
 
 [discrete]
 === Use case: Delete a task from revision plan (Shui Yao)
@@ -680,51 +835,38 @@ Use case ends
 *MSS*
 
 1. Student clears the revision plan
-2. NUStudy requests for confirmation
-3. Student confirms the clear operation
-4. NUStudy clears the revision plan
-5. NUStudy informs the Student that the revision plan is successfully cleared
+2. NUStudy clears the revision plan
+3. NUStudy informs the Student that the revision plan is successfully cleared
 
 Use case ends.
 
-*Extensions*
-
-[none]
-* 2a. Student disapprove the clear operation
-[none]
-** 2a1. NUStudy informs the Student of the cancellation of clear operation
-* Use case ends
-
+// tag::statsUseCase[]
 [discrete]
-=== Use case: get statistics for subjects (Irene)
+=== Use case: Get statistics for subjects (Irene)
 
 *MSS*
 
-1. Student gives the command to get the statistics for a subject `stats s/SUBJECT [s/SUBJECT1] [s/SUBJECT2]...`
-2. Application returns a piechart with number of questions answered correctly and incorrectly
+1. Student gives the command to get the statistics for a difficulty and some subjects `stats [d/DIFFICULTY] [s/SUBJECT1] [s/SUBJECT2]...`
+2. Application returns a pie chart with number of questions answered correctly and incorrectly
 
 Use case ends
 
 *Extensions*
 [none]
-* 1a. Student provides an invalid subject
+* 1a. Student provides an invalid difficulty or invalid subjects
 [none]
-** 1a1. Application will return a list of subjects that are in the database
-** 1a2. Student will re-enter the command with a valid subject
+** 1a1. Application will inform students that there are no statistics for that difficulty/subjects
+** 1a2. Student will re-enter the command
+** Repeat 1a1 and 1a2 until valid difficulty/subjects is/are provided
 * Use case resumes from step 2
 
-* 1b. Student provides more than one subject
-[none]
-** 1b1. Application returns a piechart totaling the statistics of question answered correctly and incorrectly for all subjects as well as a list of the individual statistics for each subject
-* Use case ends
-
 [discrete]
-=== Use case: get statistics for individual questions (Irene)
+=== Use case: Get report of individual questions (Irene)
 
 *MSS*
 
-1. Student gives the command to get statistics for a question `stats INDEX`
-2. Application returns past responses to the question, the subject and/or topic associated with the question and statistics of how well the question has been answered
+1. Student gives the command to get report of a question `report INDEX`
+2. Application returns past attempts of the question and statistics of how well the question has been answered
 
 Use case ends
 
@@ -732,19 +874,29 @@ Use case ends
 [none]
 * 1a. Student gives an out-of-range index
 [none]
-** 1a1. Application displays the range of questions available
+** 1a1. Application displays a message indicating that the index is invalid
 ** 1a2. Student re-enters the command
 ** Repeat 1a1 and 1a2 until a valid index is provided
 * Use case resumes from step 2
 
+[none]
+* 1b. Student does not provide an index
+[none]
+** 1b1. Application displays a message indicating that the command format is invalid
+** 1b2. Student re-enters the command
+** Repeat 1b1 and 1b2 until a valid index is provided
+* Use case resumes from step 2
+// end::statsUseCase[]
+
 // tag::usecasew[]
 [discrete]
-=== Use case: Specify difficulty level of questions (Xueting)
+=== Use case: Add a question to question bank in NUStudy (Xueting)
 
 *MSS*
 
-1. Student specifies the difficulty level as the last tag while adding a questions - `add q/QUESTION a/ANSWER s/SUBJECT d/DIFFICULTY`
-2. Application shows and stores the question with its difficulty level
+1. Student keys in add question and specifies the relevant fields - `add q/QUESTION a/ANSWER s/SUBJECT d/DIFFICULTY`
+2. Application adds the question with its fields.
+3. Application informs the user about the success addition of question.
 
 Use case ends
 
@@ -757,6 +909,36 @@ Use case ends
 ** 1a2. Student inputs the difficulty level
 ** Repeat 1a1 and 1a2 until a difficulty level is provided
 * Use case resumes from step 2
+
+[discrete]
+=== Use case: Delete a question (Xueting)
+
+*MSS*
+
+1. User requests to view a list of questions from another command (eg. `findq`, `difficulty`, `subject`).
+2. Application shows the list of questions retrieved from this command.
+3. User enters the delete command with the index of the question to be deleted.
+4. Application removes the question from the question bank.
+5. Application informs the user about the success of deletion.
+
+Use case ends
+
+*Extensions*
+
+[none]
+* 1a. There is no question listed from the previous command.
+[none]
+** 1a1. Application informs the user that the index is invalid since the question list is empty.
+* Use case ends
+
+[none]
+* 1b. Student inputs invalid index for a question (either negative or out of range).
+[none]
+** 1b1. Application shows an error message to inform the user that the index is invalid.
+** 1b2. Student re-enter the command by providing a valid index.
+** Repeat 1b1 and 1b2 until valid index is provided
+* Use case resumes at step 2
+// end::usecasew[]
 
 [discrete]
 === Use case: Edit difficulty level of a specific question (Xueting)
@@ -793,58 +975,9 @@ Use case ends
 ** Repeat 1c1 and 1c2 until a valid index is provided
 * Use case resumes at step 1
 
-[discrete]
-=== Use case: Get statistics for a difficulty level (Xueting)
-
-*MSS*
-
-1. Student gives the command to get the statistics of the number of questions attempted at the specific difficulty level for a subject stats - `-dif d/DIFFICULTY s/SUBJECT`
-2. Application returns a bar chart which consists of the questions index and the number of attempts for this difficulty level
-
-Use case ends
-
-*Extensions*
-
-[none]
-* 1a. Student does not provide the difficulty level or the subject after the -dif flag
-[none]
-** 1a1. Application shows an error message requesting the corresponding inputs
-** 1a2. Student re-enter the necessary fields
-** Repeat 1a1 and 1a2 until valid inputs are provided
-* Use case resumes at step 2
-
-[none]
-* 1b. Student inputs invalid difficulty level or subject
-[none]
-** 1b1. Application displays a list of difficulty levels and subjects available
-** 1b2. Student re-enter the necessary fields by choosing from the list
-** Repeat 1b1 and 1b2 until valid inputs are provided
-* Use case resumes at step 2
-// end::usecasew[]
-
-[discrete]
-=== Use case: Delete an existing question (Dongjun)
-
-*MSS*
-
-1. Student gives the command to delete an existing question `delete INDEX`
-2. Application shows the question being deleted
-3. Application deletes the question indicated by the student from the database
-
-Use case ends
-
-*Extensions*
-
-[none]
-* 1a. The index given by student is out of the range
-[none]
-** 1a1. Application shows the error and displays the number of questions stored
-** 1a2. Student enters the valid index
-* Use case resumes from step 1
-
 // tag::quizUseCase[]
 [discrete]
-=== Use case: Take a test (Dongjun)
+=== Use case: Take a quiz (Dongjun)
 
 *MSS*
 
@@ -860,17 +993,11 @@ Use case ends
 *Extensions*
 
 [none]
-* 1a. Student inputs the invalid test commands
+* 1a. Student inputs the invalid quiz command
 [none]
-** 1a1. Application returns the correct format for test command
-** 1a2. Students enter the correct test command
+** 1a1. Application returns the correct format for quiz command
+** 1a2. Students enter the correct quiz command
 * Use case resumes from step 1
-
-[none]
-* 2a. Student chooses to change the difficulty of questions by giving `change -dif DIFFICULTY`
-[none]
-** 2a1. The question set will change to a new difficulty
-* Use case resumes from step 2
 
 [none]
 * 3a. Student chooses to skip current questions by giving `skip`
@@ -881,14 +1008,14 @@ Use case ends
 [none]
 * 3b. Student chooses to get the answer for current question by giving `show`
 [none]
-** 3b1. Application displays the answer and go to next question
+** 3b1. Application displays the answer
 * Use case resumes from step 2
 
 [none]
-* a. At any time, Student chooses to exit from the test
+* a. At any time, Student chooses to exit from the quiz
 [none]
 ** a1. Student gives the command `quit`
-** a2. Application exits from the test mode
+** a2. Application exits from the quiz mode
 * Use case ends
 // end::quizUseCase[]
 
@@ -900,6 +1027,7 @@ Use case ends
 rather than merely linking to somewhere on the filesystem
 . Export format of lecture notes and flash cards must be human-readable text
 . Images must be referenced by pathnames with respect to the image folder
+. Charts returned by statistics feature must be simple enough that it is universally understood
 
 [appendix]
 == Glossary
@@ -939,3 +1067,98 @@ _This image should appear in place of the old image, if any, even if the filenam
 in its data folder.
 .. Relaunch the application. _The app should not throw an exception, merely not display any images._
 .. Add back the images to the lecture notes using `editnote`. _This operation should succeed._
+
+=== Question management
+. Adding a question with all necessary fields
+.. Type `addq q/MVC design pattern refers to (  ). a/Model View Controller s/CS2103T d/Medium` in the command line.
+.. The application will show the success of adding the question if all fields are present and valid.
+. Editing a question
+.. Type `editq 1 d/Hard` to change the difficulty of the question at index 1 to hard.
+.. The application will show the success of updating the question's difficulty and display all the fields.
+The question at index 1 will have a new difficulty of Hard.
+. Finding a question
+.. Type `findq java python` in the command line.
+.. The application will return a list of questions which contain the keyword "java" or "python" in either its
+question body or answer. If no question contains these keywords, the application will return an empty list.
+. Deleting a question
+.. Type `listq` in the command line to view a list of all questions.
+.. Type `deleteq 2` in the command line to delete the second question from the list.
+.. The application will display the success of deletion of this question and its relevant fields.
+The question will be removed from the list.
+
+=== Quiz mode
+NOTE: Ensure the application has at least one question to do the quiz.
+
+. Entering the quiz mode
+.. Type `quiz n/1 d/easy s/cs2040` in the command line.
+.. If the application has the questions which fit the requirement, it will enter the quiz mode and display the quiz questions.
+. Answering the question
+.. Type your answer in the command line after entering the quiz mode.
+.. The result of your answer will be displayed under the command box.
+. Showing the answer of the question
+.. Type `show` in the command line when the application is in the quiz mode.
+.. The correct answer of the current quiz question will be displayed under the command box.
+. Skipping current question
+.. Type `skip` in the command line when the application is in the quiz mode.
+.. The current question will be skipped and the next question will be displayed if there are still available questions.
+. Quiting from the quiz mode
+.. Type `quit` in the command line when the application is in the quiz mode.
+.. The application will exit from the quiz mode and return to the original mode.
+
+=== Getting statistics
+NOTE: Ensure that there are some questions in the app and some of them have been answered in quiz mode.
+
+. Getting statistics
+.. Type `stats`.
+.. The application will display "Here are the statistics:".
+All notes, tasks and questions will be hidden, a panel containing a pie chart will appear.
+. Getting questions
+.. Type `question -c`.
+.. The application will display "Here are the correct questions:".
+All notes, tasks and questions will be hidden, a panel containing a pie chart and a
+list of all correct quiz results will appear.
+. Getting report
+.. Type `report 1`.
+.. The application will display "Here is a report of question 1:".
+All notes, tasks and questions will be hidden, a panel containing a pie chart and
+all quiz results for question 1 will appear.
+. Getting overview
+.. Type `overview`.
+.. The application will display "Here is an overview of the questions:".
+All notes, tasks and questions will be hidden, a panel containing a stack bar chart will appear.
+
+=== Revision task management
+. Before adding task
+.. Add some notes to the app to be used for tasks.
+.. Add notes by typing `addnote t/a c/a`, followed by `addnote t/b c/b`.
+. Adding a task for revising a note to the revision list
+.. Type `rn t/a dt/01/11/2019 tm/0900`.
+.. The app will display message for successful addition of the task if there is a note with title "a" in the note list.
+. Adding a task for revising a question to the revision list
+.. Type `rq i/1 dt/12/09/2019 tm/1200`.
+.. The app will display message for successful addition of the task if there is a question with index 1 in the question list.
+If the question list is empty, an error message will be shown.
+. Editing a task
+.. Type `redit 1 h/b`.
+.. The heading of the first task will be changed to b if both the first task and a note with title "b" exist in the note list.
+. Marking a task as done
+.. Type `rdone 1`
+.. The first task will be marked as done.
+. Searching for a task
+.. Type `rfind tm/0900`.
+.. All task at 9am will be shown (if existing).
+. Listing all tasks
+.. Type `rlist`.
+.. All tasks will be shown.
+. Showing finished tasks
+.. Type `finished`.
+.. All finished (done) tasks will be shown.
+.. Similar operations can be done for unfinished tasks and overdue tasks with command `unfinished`, `overdue` respectively.
+. Deleting a task
+.. Type `rlist` to display all tasks for better demo effect. (If there are more than one tasks in the current list view, you can skip this step)
+.. Type `rdelete 2`
+.. The second task in the current list view will be successfully deleted (if existing).
+. Clearing all tasks
+.. Type `rclear`.
+.. All tasks will be cleared.
+.. Type `rlist` and you can see no task is left in the list.
