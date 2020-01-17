@@ -1,1 +1,2 @@
 This  is to test for travisCI
+Test for auto-publishing
