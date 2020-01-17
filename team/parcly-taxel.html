@@ -1,0 +1,567 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="Asciidoctor 1.5.6.1"><title>Jeremy Tan (Parcly Taxel) - Project Portfolio for NUStudy</title><link rel="stylesheet" href="../stylesheets/gh-pages.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../stylesheets/coderay-asciidoctor.css"></head><body class="article"><div id="site-header"><nav class="navbar navbar-light bg-light"><div class="container"><a class="navbar-brand" href="../index.html">NUStudy</a><ul class="navbar-nav"><li class="nav-item"><a class="nav-link" href="../UserGuide.html">User Guide</a></li><li class="nav-item"><a class="nav-link" href="../DeveloperGuide.html">Developer Guide</a></li><li class="nav-item"><a class="nav-link active" href="../AboutUs.html">About Us</a></li><li class="nav-item"><a class="nav-link" href="../ContactUs.html">Contact Us</a></li><li class="navitem"><a class="nav-link" href="https://github.com/AY1920S1-CS2103T-F11-4/main"><span class="fa fa-github fa-lg" aria-hidden="true"></span>&nbsp;View on GitHub</a></li></ul></div></nav></div><div id="header"><h1>Jeremy Tan (Parcly Taxel) - Project Portfolio for NUStudy</h1></div><div id="content"><div class="sect1">
+<h2 id="introduction"><a class="link" href="#introduction">Introduction</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>As part of the CS2103 Software Engineering module at the National University of Singapore,
+I was part of a team of five tasked to develop an application from <a href="https://github.com/nus-cs2103-AY1920S1/addressbook-level3">a given Java
+address book application</a>, which will be called AB3 in the rest of the portfolio.
+We chose to morph it into NUStudy, an application for
+managing lecture notes, questions and revision tasks&#8201;&#8212;&#8201;all three things pertinent to the
+average university student, regardless of location. Like the original, it has a command line
+as its main method of interaction and a JavaFX GUI for display. It has around 5000 lines of code
+and looks like this:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/Ui.png" alt="Ui">
+</div>
+</div>
+<div class="paragraph">
+<p>This portfolio showcases my contributions to NUStudy: implementing the lecture notes by
+retooling the existing <em>Person</em> class, related documentation in the user and developer guides
+and management of the Git repository surrounding NUStudy. It also showcases my technical writing skills
+and my ability to explain complicated enhancements or modifications to the uninitiated person.</p>
+</div>
+<div class="paragraph">
+<p>In this portfolio <code>monospace</code> indicates command-line input (commands, parameters, etc.)
+and <em>italics</em> mark class names. Pull requests and issues will be marked solely
+by their numbers and a # sign (e.g. <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/issues/1">#1</a>);
+unless otherwise specified they refer to NUStudy.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="summary-of-contributions"><a class="link" href="#summary-of-contributions">Summary of contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This is a brief description of my contributions to NUStudy – to code, documentation
+and project management. These contributions show my ability to not only write good code,
+but also manage and synthesise team members' varying output into a coherent whole.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>I was responsible for <strong>implementing lecture notes</strong> (starting from <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/34">#34</a>).
+These are simple items with a title, some content and optionally an image. For this I modified the existing
+<em>Person</em> class in the original address book application and its associated commands (<em>AddCommand</em>, <em>EditCommand</em>, etc.)&#8201;&#8212;&#8201;I did not have to make any new classes.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Lecture notes are the primary source of a student&#8217;s acquired knowledge in university, yet they come in many formats.
+Having a unified appearance helps the student understand the content of lecture notes better, by removing
+unnecessary markup and distracting styles.</p>
+</li>
+<li>
+<p>While adding this feature I also refactored all other code throughout the application to use names relevant to
+lecture notes. This helped my teammates add their own features, setting an example for them to follow.</p>
+</li>
+<li>
+<p>Image support was implemented starting from <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/67">#67</a>. Instead of a custom class,
+I used JavaFX&#8217;s <em>scene.image.Image</em>, which reduced the additional code I had to write on top of the
+<em>Title</em> and <em>Content</em> classes by avoiding an unnecessary wrapper.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>As my fellow team members added their features to the code, one of the constructors of <em>CommandResult</em>
+grew to have four boolean variables representing command side effects. In <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/71">#71</a>
+I replaced the boolean arguments of this constructor with a single integer argument acting as a bit field.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This serves two purposes: to avoid unnecessary use of the boolean literals and to allow easy extension
+to more side effects by increasing the range of the integer argument.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>I enforced a style for the user and developer guides and wrote several of their key sections,
+such as the user guide&#8217;s introduction and the developer guide&#8217;s non-functional requirements.
+See <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/21">#21</a> and <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/22">#22</a>
+for examples.</p>
+</li>
+<li>
+<p>In v1.4 I improved the graphical user interface in response to bugs filed by other people
+(<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/148">#148</a>).</p>
+</li>
+<li>
+<p>I was the <strong>lead integrator</strong> for NUStudy:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Managed all four releases (v1.1 to v1.4) on GitHub</p>
+</li>
+<li>
+<p>Set up Travis and Netlify for the project, enabling continuous integration and previews of documentation</p>
+</li>
+<li>
+<p>Resolved merge conflicts for teammates' pull requests (see <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/44">#44</a> for an example)</p>
+</li>
+<li>
+<p>Attached milestones and labels to issues and pull requests where the original authors failed to specify them</p>
+</li>
+<li>
+<p>Before v1.2, the only person who could merge pull requests</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>I contributed to <a href="https://github.com/nus-cs2103-AY1920S1/forum">forum</a> discussions, both as a receiver
+(<a href="https://github.com/nus-cs2103-AY1920S1/forum/issues/88">#88</a>, <a href="https://github.com/nus-cs2103-AY1920S1/forum/issues/106">#106</a>) and source
+(<a href="https://github.com/nus-cs2103-AY1920S1/forum/issues/68">#68</a>, <a href="https://github.com/nus-cs2103-AY1920S1/forum/issues/100">#100</a>) of information.</p>
+</li>
+<li>
+<p>I reviewed the following pull requests non-trivially, among others: <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/40">#40</a>,
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/49">#49</a>, <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/53">#53</a>,
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/70">#70</a>.</p>
+</li>
+<li>
+<p>Whenever I could, I resolved issues assigned to teammates other than me, e.g.
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/issues/123">#123</a>, <a href="https://github.com/AY1920S1-CS2103T-F11-4/main/issues/131">#131</a>,
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/issues/141">#141</a>.</p>
+</li>
+<li>
+<p>A detailed exposition of all code I contributed to NUStudy can be found
+<a href="https://nus-cs2103-ay1920s1.github.io/tp-dashboard/#=undefined&amp;search=Parcly-Taxel">here</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="user-guide-contributions"><a class="link" href="#user-guide-contributions">User guide contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Our application&#8217;s user guide had to be updated with the new features we added in code.
+The sections below are what I wrote for my features, demonstrating my ability to write
+clear, concise end-user documentation.</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="lecture-notes"><a class="link" href="#lecture-notes">Lecture notes</a></h3>
+<div class="sect3">
+<h4 id="adding-lecture-notes-code-addnote-code"><a class="link" href="#adding-lecture-notes-code-addnote-code">Adding lecture notes: <code>addnote</code></a></h4>
+<div class="paragraph">
+<p>This is the basic command for getting your lecture notes into NUStudy. The <code>i/</code> field, if provided, brings up a
+dialog where you can choose an image from your computer&#8217;s file system; such an image will be displayed at the
+bottom of the note.<br>
+Format: <code>addnote t/TITLE c/CONTENT [i/]</code></p>
+</div>
+<div class="paragraph">
+<p>Suppose you want to remember what the order-7 triangular tiling looks like and its Schläfli symbol.
+Type <code>addnote t/Order-7 triangular tiling c/{3,7} i/</code> into the command line. The file selection dialog
+will pop up, and you can select the image from your file system. Once done, you will see the lecture note:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/screenshots/addnote.png" alt="addnote">
+</div>
+</div>
+<div class="paragraph">
+<p>It is fine to back out of the image selection dialog; an image can always be added later using <code>editnote</code>.
+Your images are copied into the application&#8217;s data folder, so don&#8217;t worry about losing them –
+you can always take them along. Images resize according to the window, but if an image is small enough that it can fit at its
+natural resolution, it is left that way.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="editing-lecture-notes-code-editnote-code"><a class="link" href="#editing-lecture-notes-code-editnote-code">Editing lecture notes: <code>editnote</code></a></h4>
+<div class="paragraph">
+<p>If your lecture notes need updating, use this command, providing arguments <code>t/</code>, <code>c/</code> and <code>i/</code> (at least one)
+as you would do with <code>addnote</code>, but only those arguments you want to change. Providing <code>i/</code> brings up the same image
+selection dialog like in <code>addnote</code>.</p>
+</div>
+<div class="paragraph">
+<p>Images can explain a lot, but if you want to remove them, use <code>i/none</code> in your command, and the dialog
+will not appear. Otherwise, if you back off from choosing an image (e.g. by clicking the dialog&#8217;s
+close button), nothing will happen and your images will remain safe and sound.</p>
+</div>
+<div class="paragraph">
+<p>Multiple notes can share the same image, and you can overwrite existing images currently
+in NUStudy with new ones sharing the same filename.</p>
+</div>
+<div class="paragraph">
+<p>The index must be between 1 and the number of lecture notes inclusive. It is listed before the title of
+each lecture note:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/screenshots/index.png" alt="index">
+</div>
+</div>
+<div class="paragraph">
+<p>Format: <code>editnote INDEX [t/TITLE] [c/CONTENT] [i/[none]]</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="viewing-lecture-notes-code-findnote-code"><a class="link" href="#viewing-lecture-notes-code-findnote-code">Viewing lecture notes: <code>findnote</code></a></h4>
+<div class="paragraph">
+<p>Of course, what use are virtual lecture notes if you can&#8217;t search through them? This command
+displays those notes whose titles contain any one of the words (space-separated, ignoring case) you provide
+as arguments.<br>
+Format: <code>findnote WORD [WORD]…</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="listing-all-lecture-notes-code-listnote-code"><a class="link" href="#listing-all-lecture-notes-code-listnote-code">Listing all lecture notes: <code>listnote</code></a></h4>
+<div class="paragraph">
+<p>This is like running <code>findnote</code> but with no arguments. It shows all your lecture notes in their unabashed glory.<br>
+Format: <code>listnote</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="deleting-lecture-notes-code-deletenote-code"><a class="link" href="#deleting-lecture-notes-code-deletenote-code">Deleting lecture notes: <code>deletenote</code></a></h4>
+<div class="paragraph">
+<p>When your semester ends, surely you want to free up space on your computer so you can accept new notes
+for the coming semester? This command deletes the lecture note with the index you provide.<br>
+Format: <code>deletenote INDEX</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="clearing-all-lecture-notes-code-clearnote-code"><a class="link" href="#clearing-all-lecture-notes-code-clearnote-code">Clearing all lecture notes: <code>clearnote</code></a></h4>
+<div class="paragraph">
+<p>Finally, if you ever find a better application than NUStudy for your lecture notes, you can clear
+them all. Your quiz questions and revision tasks will not be affected.<br>
+Format: <code>clearnote</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="lecture-note-grouping-suggestions"><a class="link" href="#lecture-note-grouping-suggestions">Lecture note grouping suggestions</a></h4>
+<div class="paragraph">
+<p>NUStudy will intelligently suggest groupings of lecture notes based on their content.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>In addition, I also harmonised the layout of the user guide and
+formatted other team members' contributions to said guide in a common manner.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="developer-guide-contributions"><a class="link" href="#developer-guide-contributions">Developer guide contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Like other projects in CS2103, there is the expectation that future developers could
+build on NUStudy. Thus we also updated the developer guide; below are my principal contributions to it,
+showcasing three aspects: my ability to write technical documentation, the complexity of what
+I contributed in code and my proficiency in using diagrams to explain my work.</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="image-support-for-lecture-notes"><a class="link" href="#image-support-for-lecture-notes">Image support for lecture notes</a></h3>
+<div class="paragraph">
+<p>Usually, we do not learn best from just text; we rely on images that our minds can process more easily.
+As such, implementing images in lecture notes is a very important feature for NUStudy.</p>
+</div>
+<div class="paragraph">
+<p>Although some lecture notes have multiple images, it is always possible to combine them using
+basic image editing software like the GNU Image Manipulation Program (GIMP) and Paint, so the implementation is
+limited to at most one image per note. Having a common format for notes facilitates their retrieval through
+the <code>findnote</code> command and aids a human user in remembering what the notes say.</p>
+</div>
+<div class="sect3">
+<h4 id="implementation"><a class="link" href="#implementation">Implementation</a></h4>
+<div class="paragraph">
+<p>Instead of a custom class to represent an image, JavaFX&#8217;s <code>scene.image.Image</code> is used instead.
+This is out of necessity, since an <code>ImageView</code> is needed to display an image in the GUI and it requires
+an <code>Image</code> object, not just a <code>String</code> path to the image. No significant coupling is introduced
+by this choice because <code>Image</code> objects can exist without a GUI to display them.</p>
+</div>
+<div class="paragraph">
+<p>The static method <code>selectImage()</code> in <code>AppUtil</code> opens up a dialog allowing the user to choose the necessary image.
+This is possible because <code>FileChooser#showOpenDialog()</code>, which shows the dialog, can be fed an argument of <code>null</code>
+instead of having to rely on a <code>Window</code> object, which is the domain of the <code>UI</code> module.</p>
+</div>
+<div class="paragraph">
+<p>The aforementioned dialog returns <code>null</code> if it is closed
+without choosing a file (i.e. clicking the close button). We interpret this as "no change"
+rather than "no image", i.e. <code>addnote</code> and <code>editnote</code> proceed as if <code>i/</code> was not provided.
+If the "no image" interpretation was used, the user who decides to edit a lecture note&#8217;s image
+but then decides not to would be surprised to see the image disappear without warning.
+Therefore the value <code>i/none</code> has to be explicitly provided in <code>editnote</code> to remove the image; <code>EditNoteDescriptor</code>
+has the field <code>isImageRemoved</code> to track this.</p>
+</div>
+<div class="paragraph">
+<p>We also defer image selection until after the title has been checked against existing lecture notes,
+which saves time that would otherwise be wasted in navigating to the desired image.
+This is accomplished using three things:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the <code>finalizeImage()</code> method of the <code>Note</code> class, calling <code>selectImage()</code></p>
+</li>
+<li>
+<p>the <code>needsImage</code> field of <code>Note</code>, which allows a one-time execution of <code>finalizeImage()</code></p>
+</li>
+<li>
+<p>the <code>isImageReplaced</code> field of <code>EditNoteDescriptor</code></p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/ImageSelectionSequenceDiagram.png" alt="ImageSelectionSequenceDiagram">
+</div>
+<div class="title">Figure 1. Sequence diagram for the execution of <code>EditNoteCommandParser</code></div>
+</div>
+<div class="paragraph">
+<p>The diagram above shows how <code>EditNoteCommandParser</code> creates an <code>EditNoteCommand</code>. It first
+creates an <code>EditNoteDescriptor</code> to hold details of what changes in the note, setting the new
+title (provided by the <code>t/</code> argument) and content (<code>c/</code>) as necessary. If <code>i/none</code> is present,
+the <code>EditNoteDescriptor</code> is set to remove the image. If <code>i/</code> is provided, it is set to replace
+the image. An <code>EditNoteCommand</code> containing the <code>EditNoteDescriptor</code> is finally returned for execution.</p>
+</div>
+<div class="paragraph">
+<p>Images are only referenced, not embedded, in the JSON file holding application data. These references are
+Uniform Resource Identifiers (URIs) of system files, e.g. <code>file:data/picture.png</code>. Since NUStudy is meant to be portable,
+we cannot use absolute paths, since they would break when the images are moved or deleted. Instead we copy images
+into application data using <code>finalizeImage()</code>, which points references to these local copies.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>Both the use of a JavaFX built-in object for images and the system-dependent implementation of
+graphical objects required me to make certain critical decisions regarding image support in lecture notes.</p>
+</div>
+<hr>
+</div>
+<div class="sect3">
+<h4 id="design-considerations-where-to-place-the-image"><a class="link" href="#design-considerations-where-to-place-the-image">Design considerations: where to place the image?</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Alternative 1 (current choice):</em> We show the images associated to each and every lecture note
+in the first column, together with the title and content.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: This is easier to implement, for the code interfacing with FXML does not have to be written in places other
+than those directly pertaining to notes. It also makes the note "card" (object representing the note)
+self-contained.</p>
+</li>
+<li>
+<p>Cons: Scrolling through lecture notes, all with images, takes time, but this downside is alleviated
+by the <code>findnote</code> command.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Alternative 2:</em> We place <strong>one</strong> full note in the second column and only show a preview (the title and first words
+of the content) in the first column.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: This behaviour is closer to notepad applications on mobile devices which show a list of notes.
+It saves space in the list and gives more prominence to a selected note, turning it into a flash card.</p>
+</li>
+<li>
+<p>Cons: The second column, normally housing revision tasks, requires extra code to handle the display
+of full notes. This may include a separate <code>NotePreview</code> class, or <code>Note</code> may have a variable toggling
+between preview and full modes.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="design-considerations-when-to-copy-images-into-the-local-folder"><a class="link" href="#design-considerations-when-to-copy-images-into-the-local-folder">Design considerations: when to copy images into the local folder</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><em>Alternative 1 (current choice):</em> We copy images when the command is executed, i.e. in <code>Command#execute()</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: This effects a better separation of concerns – image selection is not execution of the command, while
+copying can be a side effect of command execution. Individual command effects can be fine-tuned.</p>
+</li>
+<li>
+<p>Cons: Each command that copies images needs to have its own code implementing the copy. To reduce code
+duplication, that common code can be written as a method of the <code>Note</code> class requiring a <code>Path</code> object representing
+the destination folder for the copy.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Alternative 2:</em> We copy images when the image is selected, i.e. in <code>AppUtil#selectImage()</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: Compared to alternative 1, this takes less time between image selection and writing into
+application data, minimising the chance of exceptions due to changes in the file system (permissions,
+existence of the file at the specified path, etc.) being raised.</p>
+</li>
+<li>
+<p>Cons: <code>selectImage()</code> has two only loosely related responsibilities in this alternative, which is
+a worse separation of concerns. It is impossible to take into account user preferences at the point of image
+selection, since it requires a <code>Model</code> object which is not available to <code>AppUtil#selectImage()</code>.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>The remaining documentation, shown below, is my contribution to the developer guide concerning aspects
+not directly related to source code – use cases, non-functional requirements and a glossary.</p>
+</div>
+<h3 id="use-case-create-lecture-note-jeremy" class="discrete">Use case: Create lecture note (Jeremy)</h3>
+<div class="paragraph">
+<p><strong>MSS</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Student gives the command to add a lecture note – <code>addnote t/TITLE c/CONTENT</code></p>
+</li>
+<li>
+<p>Application shows a lecture note with the given title and contents to the user</p>
+</li>
+<li>
+<p>Application also updates the lecture note list with the new note</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Use case ends</p>
+</div>
+<div class="paragraph">
+<p><strong>Extensions</strong></p>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a. Student also gives <code>i/</code> in the command</p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a1. Application brings up a file selection dialog</p>
+</li>
+<li>
+<p>1a2. Student selects the image they wish to include in the lecture note</p>
+</li>
+<li>
+<p>1a3. Application accepts the image</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 2</p>
+</li>
+<li>
+<p>1a2a. The selected file is not an image (.png, .jpg, .gif)</p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a2a1. Application displays message about the supported file formats</p>
+</li>
+<li>
+<p>1a2a2. Student selects a file again</p>
+</li>
+<li>
+<p>Repeat 1a2a1, 1a2a2 until a supported file format is selected</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 1a3</p>
+</li>
+</ul>
+</div>
+<h3 id="use-case-delete-lecture-note-jeremy" class="discrete">Use case: Delete lecture note (Jeremy)</h3>
+<div class="paragraph">
+<p><strong>MSS</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Student gives the command to delete a lecture note – <code>deletenote INDEX</code></p>
+</li>
+<li>
+<p>Application deletes the note from the note list</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Use case ends</p>
+</div>
+<div class="paragraph">
+<p><strong>Extensions</strong></p>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a. Student gives an out-of-range or non-numeric index</p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a1. Application displays message showing in-range indices</p>
+</li>
+<li>
+<p>1a2. Student re-enters the command</p>
+</li>
+<li>
+<p>Repeat 1a1 and 1a2 until a valid index is provided</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 2</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="non-functional-requirements"><a class="link" href="#non-functional-requirements">Appendix A: Non-functional requirements</a></h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Images must be copied into the application data, residing in a dedicated folder,
+rather than merely linking to somewhere on the filesystem</p>
+</li>
+<li>
+<p>Export format of lecture notes and flash cards must be human-readable text</p>
+</li>
+<li>
+<p>Images must be referenced by pathnames with respect to the image folder</p>
+</li>
+<li>
+<p>Charts returned by statistics feature must be simple enough that it is universally understood</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="glossary"><a class="link" href="#glossary">Appendix B: Glossary</a></h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><a id="lecture-note"></a> Lecture note</dt>
+<dd>
+<p>An object stored in the application model that includes a title, text content and optionally an image.
+It is not quizzable.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2020-01-17 09:09:42 UTC</div></div></div></body></html>

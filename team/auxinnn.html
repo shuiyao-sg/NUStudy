@@ -1,0 +1,664 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]--><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="Asciidoctor 1.5.6.1"><title>Zhang Dongjun (Auxinnn) - Project Portfolio for NUStudy</title><link rel="stylesheet" href="../stylesheets/gh-pages.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../stylesheets/coderay-asciidoctor.css"></head><body class="article"><div id="site-header"><nav class="navbar navbar-light bg-light"><div class="container"><a class="navbar-brand" href="../index.html">NUStudy</a><ul class="navbar-nav"><li class="nav-item"><a class="nav-link" href="../UserGuide.html">User Guide</a></li><li class="nav-item"><a class="nav-link" href="../DeveloperGuide.html">Developer Guide</a></li><li class="nav-item"><a class="nav-link active" href="../AboutUs.html">About Us</a></li><li class="nav-item"><a class="nav-link" href="../ContactUs.html">Contact Us</a></li><li class="navitem"><a class="nav-link" href="https://github.com/AY1920S1-CS2103T-F11-4/main"><span class="fa fa-github fa-lg" aria-hidden="true"></span>&nbsp;View on GitHub</a></li></ul></div></nav></div><div id="header"><h1>Zhang Dongjun (Auxinnn) - Project Portfolio for NUStudy</h1></div><div id="content"><div class="sect1">
+<h2 id="introduction"><a class="link" href="#introduction">Introduction</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This portfolio is used to showcase my contribution to the CS2103T project in National University of Singapore. There
+are five students in our group, all majoring in Computer Science. We are given a task to enhance a desktop application
+<a href="https://github.com/nus-cs2103-AY1920S1/addressbook-level3">Address book 3</a> with JavaFX GUI. It supports the command line
+interface for use input. We decided to morph it into a study management application called NUStudy which is targeted to
+university students. NUStudy is used to manage students' lecture notes, test questions and revision tasks. It also
+allows students to do mock quiz and view the statistics of the results for better revision.</p>
+</div>
+<div class="paragraph">
+<p>This is the interface of our project：</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/Ui.png" alt="Ui">
+</div>
+<div class="title">Figure 1. The interface of NUStudy</div>
+</div>
+<div class="paragraph">
+<p>I am responsible for designing and writing codes for quiz feature. The following sections will describe my contributions
+to the feature and relevant documentations in detail.</p>
+</div>
+<div class="paragraph">
+<p>Here are some explanations of the icons and formatting used in this portfolio：</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p>A highlighted <code>monospace</code> implies that this is a command that can be inputted and executed by the application.</p>
+</li>
+<li>
+<p><em>Italics</em> implies a component, class or object in the architecture of the application.</p>
+</li>
+<li>
+<p>The pull requests and issues are represented by a # and its number (e.g. #1)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This symbol indicates that the following information is important.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="summary-of-contributions"><a class="link" href="#summary-of-contributions">Summary of contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This section briefly describes my contributions to the implementation of quiz feature and other helpful contributions to
+the group.</p>
+</div>
+<div class="paragraph">
+<p><strong>Enhancement added:</strong> I added the quiz feature of the application (Starting from
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/36">#36</a>)</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What it does: This feature allows the users to do a mock quiz. The <code>quiz</code> command allows the users to enter the quiz
+mode of the application. Users can type answer on command line and the correctness will be checked to show the result.
+The result of each quiz will be stored as <em>QuizResult</em> and used to support the report feature.</p>
+</li>
+<li>
+<p>Justification:  The <code>quiz</code> command will randomly select questions from the database according to the difficulty and
+subject specified by users and stored in <em>QuizQuestionList</em>. It will act like an actual online quiz which the question
+will be displayed one at a time and users need to type answer to receive the feedback from the application to know
+whether it is correct or wrong.</p>
+</li>
+<li>
+<p>Highlights: This feature cooperates with another feature implemented by my teammate. The result of each question from
+the quiz will be stored and my teammate will use it for report feature. The implementation was tricky in the beginning
+on how to override the question panel and displaying quiz questions one after another. I solve it by using a boolean
+to set the <em>QuestionListPanel</em> in the <em>MainWindow</em> class and adding a list containing one quiz question in
+<em>QuizQuestionList</em> class to display question one by one(<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/49">#49</a>
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/70">#70</a>
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/76">#76</a>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Code contributed:</strong> You may review the report of my code contribution to the project <a href="https://nus-cs2103-ay1920s1.github.io/tp-dashboard/#search=Auxinnn&amp;sort=groupTitle&amp;sortWithin=title&amp;since=2019-09-06&amp;timeframe=commit&amp;mergegroup=false&amp;groupSelect=groupByRepos&amp;breakdown=false&amp;tabOpen=true&amp;tabType=authorship&amp;tabAuthor=Auxinnn&amp;tabRepo=AY1920S1-CS2103T-F11-4%2Fmain%5Bmaster%5D">here</a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Other contributions:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Basic design of Question feature:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>During the development of quiz feature, I helped to design a basic model of question feature so that my teammate
+could refer to the template for modification and further development (<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/39">#39</a>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Implement Quiz Result to support report feature:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>I designed and implemented the basic architecture of quiz result so that my teammate could use it to support the
+report feature (<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/53">#53</a>
+<a href="https://github.com/AY1920S1-CS2103T-F11-4/main/pull/74">#74</a>).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Identify problems in application for other teams:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>I helped to discover some of the bugs in the application for another team so that they can fix them and improve the
+quality of the product (<a href="https://github.com/Auxinnn/ped/issues/2">#2</a>
+<a href="https://github.com/Auxinnn/ped/issues/6">#6</a>).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="user-guide-contributions"><a class="link" href="#user-guide-contributions">User guide contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We have modified the User Guide of Address Book to demonstrate the commands of our project. The following part shows my
+contribution to the <strong>NUStudy User Guide</strong> for quiz feature.</p>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="quiz-mode"><a class="link" href="#quiz-mode">Quiz mode</a></h3>
+<div class="paragraph">
+<p>There is a built-in quiz mode in NUStudy for you to take a revision quiz. You can indicate the number of questions,
+subject and difficulty and the quiz will randomly select questions for you according to your requirement. You will
+answer the question one by one and your result will be given.</p>
+</div>
+<div class="sect3">
+<h4 id="entering-quiz-mode-code-quiz-code"><a class="link" href="#entering-quiz-mode-code-quiz-code">Entering quiz mode: <code>quiz</code></a></h4>
+<div class="paragraph">
+<p>You can enter the quiz mode using this command.<br>
+Format: <code>quiz n/NUMBER_OF_QUESTIONS d/DIFFICULTY s/SUBJECT</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>NUMBER_OF_QUESTIONS</code> must be a positive integer.<br>
+<code>DIFFICULTY</code> and <code>SUBJECT</code> are case insensitive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em><strong>Example:</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Step 1: Types <code>quiz n/2 d/easy s/cs2040</code> in the command box and presses <code>Enter</code> to execute the command. The following
+graph specifies how you can input the command.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuizModeCommand.png" alt="600" width="600">
+</div>
+<div class="title">Figure 2. Typing <code>quiz</code> command</div>
+</div>
+<div class="paragraph">
+<p>Step 2: The result will show the message of successfully entering the quiz mode. The first quiz question will appear
+on the right column. The following graph shows the result of your <code>quiz</code> command.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuizModeCommandResult.png" alt="600" width="600">
+</div>
+<div class="title">Figure 3. Result of <code>quiz</code> command</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="answering-the-quiz-question"><a class="link" href="#answering-the-quiz-question">Answering the quiz question</a></h4>
+<div class="paragraph">
+<p>You can type your <code>answer</code> in the command box to answer the question.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The <code>answer</code> is case sensitive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em><strong>Example:</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Step 1: Types your <code>answer</code> in the command box and presses <code>Enter</code> to execute the command. The figure below is an example
+of how to answer question.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuizAnswer.png" alt="600" width="600">
+</div>
+<div class="title">Figure 4. Typing answer in the command line</div>
+</div>
+<div class="paragraph">
+<p>Step 2: The result will show the correctness of your answer  and the next question will be displayed. The following
+graph simulates the situation after you answer the question.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuizAnswerResult.png" alt="600" width="600">
+</div>
+<div class="title">Figure 5. The result after answer</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="showing-an-answer-code-show-code"><a class="link" href="#showing-an-answer-code-show-code">Showing an answer: <code>show</code></a></h4>
+<div class="paragraph">
+<p>You can check the answer for the current quiz question using this command.<br>
+Format: <code>show</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You can use it as reference and please do not use it to cheat.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em><strong>Example:</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Step 1: Types <code>show</code> in the command box and presses <code>Enter</code> to execute the command.<br></p>
+</div>
+<div class="paragraph">
+<p>Step 2: The answer of current question will be displayed.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/ShowAnswerCommand.png" alt="600" width="600">
+</div>
+<div class="title">Figure 6. Typing <code>show</code> command and its result</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="skipping-a-question-code-skip-code"><a class="link" href="#skipping-a-question-code-skip-code">Skipping a question: <code>skip</code></a></h4>
+<div class="paragraph">
+<p>You can skip current question and go to the next one using this command.<br>
+Format: <code>skip</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The question you have skipped will be marked as false for result.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em><strong>Example:</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Step 1: Types <code>skip</code> in the command box and presses <code>Enter</code> to execute the command.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/SkipCommand.png" alt="600" width="600">
+</div>
+<div class="title">Figure 7. Typing <code>skip</code> command</div>
+</div>
+<div class="paragraph">
+<p>Step 2: The current question is skipped and next question will be displayed.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/SkipCommandResult.png" alt="600" width="600">
+</div>
+<div class="title">Figure 8. The result of <code>skip</code> command</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="exiting-quiz-mode-code-quit-code"><a class="link" href="#exiting-quiz-mode-code-quit-code">Exiting quiz mode: <code>quit</code></a></h4>
+<div class="paragraph">
+<p>You can exit from the quiz mode using this command.<br>
+Format: <code>quit</code></p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You need to <code>quit</code> the quiz mode every time after you finish the quiz.<br>
+You can <code>quit</code> the quiz mode anytime you want.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><em><strong>Example:</strong></em></p>
+</div>
+<div class="paragraph">
+<p>Step 1: Types <code>quit</code> in the command box and presses <code>Enter</code> to execute the command.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuitQuizCommand.png" alt="600" width="600">
+</div>
+<div class="title">Figure 9. Typing <code>quit</code> command</div>
+</div>
+<div class="paragraph">
+<p>Step 2: The result shows message of exit from the quiz mode and the original questions will appear. The following graph
+explains what would happen after you <code>quit</code> from the quiz mode.<br></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/quiz/QuitQuizCommandResult.png" alt="600" width="600">
+</div>
+<div class="title">Figure 10. The result of <code>quit</code> command</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="coming-in-v2-0"><a class="link" href="#coming-in-v2-0">Coming in v2.0</a></h3>
+<div class="sect3">
+<h4 id="setting-a-timer-for-quiz-mode"><a class="link" href="#setting-a-timer-for-quiz-mode">Setting a timer for quiz mode</a></h4>
+<div class="paragraph">
+<p>You can set a time limit before you start a quiz to train yourself under exam conditions. NUStudy will automatically end the quiz when time is up.<br>
+Format: <code>quiz n/NUMBER_OF_QUESTIONS d/DIFFICULTY s/SUBJECT tl/TIME_LIMIT</code></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="developer-guide-contributions"><a class="link" href="#developer-guide-contributions">Developer guide contributions</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We also modified the Developer Guide so that the style and architecture fit our project. The following part shows my
+contribution to the <strong>NUStudy Developer Guide</strong> for quiz feature.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+In this sections, <code>monospace</code> indicates user command, class objects and methods.
+</td>
+</tr>
+</table>
+</div>
+<hr>
+<div class="sect2">
+<h3 id="quiz-mode-for-revision"><a class="link" href="#quiz-mode-for-revision">Quiz mode for revision</a></h3>
+<div class="sect3">
+<h4 id="implementation"><a class="link" href="#implementation">Implementation</a></h4>
+<div class="paragraph">
+<p>The quiz mode feature is facilitated by <code>Model</code>.
+The quiz-related commands extend <code>Command</code> with specific question object.
+The commands update the <code>Model</code> which is implemented by <code>ModelManager</code>.
+This in turn updates <code>AppData</code> which stores filtered specific questions internally as <code>QuizQuestionList</code>.
+Local data will be updated in the end by <code>LogicManager</code>.
+The commands include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>QuizModeCommand</code>&#8201;&#8212;&#8201;Enters the quiz mode with questions selected by user.</p>
+</li>
+<li>
+<p><code>QuizCheckAnswer</code>&#8201;&#8212;&#8201;Checks the correctness of answer entered by user.</p>
+</li>
+<li>
+<p><code>QuizShowAnswerCommand</code>&#8201;&#8212;&#8201;Shows the answer for current question.</p>
+</li>
+<li>
+<p><code>QuizSkipQuestion</code>&#8201;&#8212;&#8201;Skips the current question.</p>
+</li>
+<li>
+<p><code>QuitQuizModeCommand</code>&#8201;&#8212;&#8201;Quits the quiz mode.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>These operations are exposed in the <code>Model</code> interface as <code>Model#getQuizQuestions(int numOfQuestions, Subject subject
+Difficulty difficulty)</code>, <code>Model#setQuizQuestionList(ObservableList&lt;Question&gt; quizQuestionList)</code>,
+<code>Model#showQuizAnswer()</code>, <code>Model#getFilteredQuizQuestionList()</code>, <code>Model#checkQuizAnswer(Answer answer)</code>,
+<code>Model#removeOneQuizQuestion()</code> and <code>Model#clearQuizQuestionList()</code> respectively.</p>
+</div>
+<div class="paragraph">
+<p>Given below is an example usage scenario and how the question mechanism behaves at each step.</p>
+</div>
+<div class="paragraph">
+<p>Step 1. The user launches the application for the first time. The app will load all existing information from storage.</p>
+</div>
+<div class="paragraph">
+<p>Step 2. The user executes <code>quiz n/NUMBER OF QUESTIONS d/DIFFICULTY s/SUBJECT</code> command to enter quiz mode of the app.
+The <code>quiz</code> command calls <code>Model#getQuizQuestions(int numOfQuestions, Subject subject Difficulty difficulty)</code> and
+<code>Model#setQuizQuestionList(ObservableList&lt;Question&gt; quizQuestionList)</code>, causing the <code>AppData</code> to be updated with
+a list of specific question selected by user for quiz.</p>
+</div>
+<div class="paragraph">
+<p>Step 3. The user types answer to answer the question. It calls <code>Model#checkQuizAnswer(Answer answer)</code> and
+<code>Model#addQuizResult(QuizResult quizResult)</code>, causing the <code>AppData</code> to be updated with the result of the answer.</p>
+</div>
+<div class="paragraph">
+<p>The following graph explains how <code>QuizResult</code> class is designed:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/QuizResultClassDiagram.png" alt="QuizResultClassDiagram">
+</div>
+<div class="title">Figure 11. QuizResultClassDiagram</div>
+</div>
+<div class="paragraph">
+<p>Step 4. The user executes <code>show</code> command to show the answer of current quiz question in the app. The <code>show</code> command calls
+<code>Model#showQuizAnswer()</code>, causing the <code>AppData</code> to display the answer on the Ui.</p>
+</div>
+<div class="paragraph">
+<p>Step 5. The user executes <code>skip</code> command to skip the current quiz question in the app. The <code>skip</code> command calls
+<code>Model#removeOneQuizQuestion()</code>, causing the <code>AppData</code> to display the next quiz question on the Ui.</p>
+</div>
+<div class="paragraph">
+<p>Step 6. The user executes <code>quit</code> command to exit from the quiz mode. The <code>quit</code> command calls
+<code>Model#clearQuizQuestionList()</code>, causing the <code>AppData</code> to clear all quiz question list and return to normal mode.</p>
+</div>
+<div class="paragraph">
+<p>The following sequence diagram shows how the <code>quiz</code> operation works:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/QuizModeSequenceDiagram.png" alt="QuizModeSequenceDiagram">
+</div>
+<div class="title">Figure 12. QuizModeSequenceDiagram</div>
+</div>
+<div class="paragraph">
+<p>The following activity diagram summarizes what happens when a user executes a new command for quiz:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="../images/QuizModeActivityDiagram.png" alt="400" width="400">
+</div>
+<div class="title">Figure 13. QuizModeActivityDiagram</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="design-considerations"><a class="link" href="#design-considerations">Design Considerations</a></h4>
+<div class="sect4">
+<h5 id="aspect-how-to-store-the-quiz-results"><a class="link" href="#aspect-how-to-store-the-quiz-results">Aspect: How to store the quiz results</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Alternative 1 (current choice):</strong> Update the internal storage <code>QuizResultList</code> in <code>AppData</code> first, then save the
+updated appData in local storage when the command finishes executing.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: It is easier to implement.</p>
+</li>
+<li>
+<p>Cons: It needs the extra step to ensure that the internal list is correctly maintained.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Alternative 2:</strong> Update the local storage directly when the command is executing.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: There is no need to implement the internal list.</p>
+</li>
+<li>
+<p>Cons: The access to local memory is more frequent and it may have performance issues in terms of memory usage.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="aspect-what-data-structure-is-used-to-support-the-quiz-commands"><a class="link" href="#aspect-what-data-structure-is-used-to-support-the-quiz-commands">Aspect: What data structure is used to support the quiz commands</a></h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Alternative 1 (current choice):</strong> Use <code>QuizQuestionList</code> and <code>QuizResultList</code> to store data in <code>AppData</code>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: It is targeted to the quiz model specifically. Quiz question and result list operations are encapsulated in one class.</p>
+</li>
+<li>
+<p>Cons: Logic is duplicated as other models also implement similar list structure.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Alternative 2:</strong> Use Java list to store the quiz questions and results.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Pros: There is no need to maintain a separate list class.</p>
+</li>
+<li>
+<p>Cons: It violates Single Responsibility Principle and Separation of Concerns as the model needs to maintain various
+list operations.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<hr>
+<h3 id="use-case-take-a-quiz-dongjun" class="discrete">Use case: Take a quiz (Dongjun)</h3>
+<div class="paragraph">
+<p><strong>MSS</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Student gives the command to enter the test mode <code>quiz [n/NUMBER_OF_QUESTIONS] [d/DIFFICULTY] [s/SUBJECT]</code></p>
+</li>
+<li>
+<p>Application shows a question with difficulty and subject indicated</p>
+</li>
+<li>
+<p>Application waits for the student to key in the answer</p>
+</li>
+<li>
+<p>Student enters the answer</p>
+</li>
+<li>
+<p>Application displays whether the input answer is correct or wrong</p>
+</li>
+<li>
+<p>Repeat 2 - 5 until all questions are answered</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Use case ends</p>
+</div>
+<div class="paragraph">
+<p><strong>Extensions</strong></p>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a. Student inputs the invalid quiz command</p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>1a1. Application returns the correct format for quiz command</p>
+</li>
+<li>
+<p>1a2. Students enter the correct quiz command</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 1</p>
+</li>
+</ul>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>3a. Student chooses to skip current questions by giving <code>skip</code></p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>Application skips this question and display the next question</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 2</p>
+</li>
+</ul>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>3b. Student chooses to get the answer for current question by giving <code>show</code></p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>3b1. Application displays the answer</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case resumes from step 2</p>
+</li>
+</ul>
+</div>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>a. At any time, Student chooses to exit from the quiz</p>
+<div class="ulist none">
+<ul class="none">
+<li>
+<p>a1. Student gives the command <code>quit</code></p>
+</li>
+<li>
+<p>a2. Application exits from the quiz mode</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Use case ends</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></div><div id="footer"><div class="container"><div id="footer-text">Last updated 2020-01-17 09:09:42 UTC</div></div></div></body></html>
